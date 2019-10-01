@@ -145,6 +145,7 @@ else
     fi
 
     # link the tutorial in the shared volume
+    rm -f ${HOME}/tutorial
     ln -s /home/shared/python-tutorial/tutorial ${HOME}/tutorial
 
     # Execute the command
