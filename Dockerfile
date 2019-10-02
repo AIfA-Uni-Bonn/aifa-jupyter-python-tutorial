@@ -1,7 +1,9 @@
 # written: 2019-06-18
 
 # taking the latest image
-FROM jupyter/minimal-notebook:d4cbf2f80a2a 
+# Sep. 11 2019
+FROM jupyter/minimal-notebook:1386e2046833  
+#FROM jupyter/minimal-notebook:d4cbf2f80a2a 
 
 # inspired by: 
 # https://github.com/umsi-mads/education-notebook/blob/master/Dockerfile 
@@ -11,6 +13,8 @@ USER root
 
 RUN chgrp users /etc/passwd
 RUN echo "nbgrader:x:2000:" >> /etc/group
+
+RUN apt install less
 
 # use this for debugging in the case of UID/GID problems
 COPY start.sh /usr/local/bin/start.sh
@@ -46,3 +50,10 @@ RUN conda install numpy matplotlib scipy astropy sympy --yes
 RUN conda install scikit-image scikit-learn seaborn --yes
 
 COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
+
+
+# remove all unwanted stuff
+RUN conda clean -a -y
+
+# enable top buttons for jupyter lab
+RUN jupyter labextension install @fissio/hub-topbar-buttons
