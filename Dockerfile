@@ -14,7 +14,7 @@ USER root
 RUN chgrp users /etc/passwd
 RUN echo "nbgrader:x:2000:" >> /etc/group
 
-RUN apt install less
+#RUN apt install less
 
 # use this for debugging in the case of UID/GID problems
 COPY start.sh /usr/local/bin/start.sh
