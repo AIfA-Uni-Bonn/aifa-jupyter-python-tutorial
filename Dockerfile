@@ -16,6 +16,25 @@ RUN echo "nbgrader:x:2000:" >> /etc/group
 
 #RUN apt install less
 
+# fix the BUG in Ubuntu bionic image
+RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man\/*' /etc/dpkg/dpkg.cfg.d/excludes && \
+  apt-get -qq update && \
+  apt-get install --yes --no-install-recommends man manpages-posix && \
+  dpkg -l | grep ^ii | cut -d' ' -f3 | xargs apt-get install -y --reinstall && \
+  apt-get -qq purge && \
+  apt-get -qq clean
+
+
+# Run assemble scripts! These will actually build the specification
+# in the repository into the image.
+RUN apt-get -qq update && \
+  apt-get install --yes --no-install-recommends manpages man-db coreutils lsb-release lsb-core nano vim emacs tree  && \
+  apt-get -qq purge && \
+  apt-get -qq clean && \
+  rm -rf /var/lib/apt/lists/*
+
+
+
 # use this for debugging in the case of UID/GID problems
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod 755 /usr/local/bin/start.sh
