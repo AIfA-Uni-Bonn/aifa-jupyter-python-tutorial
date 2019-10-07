@@ -115,7 +115,8 @@ else
             if [[ -w /etc/passwd ]]; then
                 echo "Adding passwd file entry for $(id -u)"
                 cat /etc/passwd | sed -e "s/^jovyan:/nayvoj:/" > /tmp/passwd
-                echo "jovyan:x:$(id -u):$(id -g):,,,:/home/jovyan:/bin/bash" >> /tmp/passwd
+                #echo "jovyan:x:$(id -u):$(id -g):,,,:/home/jovyan:/bin/bash" >> /tmp/passwd
+                echo "$JUPYTERHUB_USER:x:$(id -u):$(id -g):,,,:/home/jovyan:/bin/bash" >> /tmp/passwd
                 cat /tmp/passwd > /etc/passwd
                 rm /tmp/passwd
             else
