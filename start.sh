@@ -149,6 +149,9 @@ else
     rm -f ${HOME}/tutorial
     ln -s /home/shared/python-tutorial/tutorial ${HOME}/tutorial
 
+    # set the USER variable to mimik a normal linux environment
+    export USER=$(whoami)
+
     # Execute the command
     run-hooks /usr/local/bin/before-notebook.d
     echo "Executing the command: ${cmd[@]}"
