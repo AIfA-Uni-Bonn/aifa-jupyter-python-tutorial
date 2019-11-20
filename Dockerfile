@@ -87,14 +87,14 @@ RUN pip install ipympl
 RUN conda clean -a -y
 
 # enable top buttons for jupyter lab
-RUN jupyter labextension install @fissio/hub-topbar-buttons
+RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
 
 
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
-RUN jupyter labextension install jupyter-matplotlib
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build 
+RUN jupyter labextension install jupyter-matplotlib --no-build
 RUN jupyter nbextension enable --py widgetsnbextension
 
-RUN jupyter labextension install @jupyterlab/latex
-# RUN jupyter lab build
+RUN jupyter labextension install @jupyterlab/latex  --no-build
+RUN jupyter lab build
 
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
