@@ -28,11 +28,21 @@ RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man
 # Run assemble scripts! These will actually build the specification
 # in the repository into the image.
 RUN apt-get -qq update && \
+  apt-get install --yes --no-install-recommends openssh-client  \
+        less \
+        texlive-latex-base \
+	texlive-latex-recommended \
+	texlive-science \
+	texlive-latex-extra \
+	texlive-fonts-recommended \
+ 	texlive-lang-german \
+	lmodern \
+	dvipng \
+	ghostscript && \
   apt-get install --yes --no-install-recommends manpages man-db coreutils lsb-release lsb-core nano vim emacs tree  && \
   apt-get -qq purge && \
   apt-get -qq clean && \
   rm -rf /var/lib/apt/lists/*
-
 
 
 # use this for debugging in the case of UID/GID problems
@@ -70,9 +80,21 @@ RUN conda install scikit-image scikit-learn seaborn --yes
 
 COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
 
+RUN conda install -y nodejs --yes
+RUN pip install ipympl
 
 # remove all unwanted stuff
 RUN conda clean -a -y
 
 # enable top buttons for jupyter lab
 RUN jupyter labextension install @fissio/hub-topbar-buttons
+
+
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager
+RUN jupyter labextension install jupyter-matplotlib
+RUN jupyter nbextension enable --py widgetsnbextension
+
+RUN jupyter labextension install @jupyterlab/latex
+# RUN jupyter lab build
+
+RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
