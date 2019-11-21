@@ -81,7 +81,7 @@ RUN conda install scikit-image scikit-learn seaborn --yes
 COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
 
 RUN conda install -y nodejs --yes
-RUN pip install ipympl
+RUN pip install ipympl jupyterlab_latex
 
 # remove all unwanted stuff
 RUN conda clean -a -y
@@ -96,6 +96,6 @@ RUN jupyter nbextension enable --py widgetsnbextension
 
 RUN jupyter labextension install @jupyterlab/latex  --no-build
 RUN jupyter lab build
-RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
+# RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
