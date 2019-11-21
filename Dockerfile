@@ -96,5 +96,6 @@ RUN jupyter nbextension enable --py widgetsnbextension
 
 RUN jupyter labextension install @jupyterlab/latex  --no-build
 RUN jupyter lab build
+RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
