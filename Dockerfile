@@ -14,8 +14,6 @@ USER root
 RUN chgrp users /etc/passwd
 RUN echo "nbgrader:x:2000:" >> /etc/group
 
-#RUN apt install less
-
 # fix the BUG in Ubuntu bionic image
 RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man\/*' /etc/dpkg/dpkg.cfg.d/excludes && \
   apt-get -qq update && \
@@ -24,12 +22,23 @@ RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man
   apt-get -qq purge && \
   apt-get -qq clean
 
+# necessary for apt-key
+RUN apt update
+RUN apt-get install -y gnupg2
+
+# add ownloud
+RUN sh -c "echo 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/desktop/Ubuntu_18.04/ /' > /etc/apt/sources.list.d/isv:ownCloud:desktop.list"
+RUN wget -nv https://download.opensuse.org/repositories/isv:ownCloud:desktop/Ubuntu_18.04/Release.key -O Release.key
+
+RUN apt-key add - < Release.key
+
 
 # Run assemble scripts! These will actually build the specification
 # in the repository into the image.
 RUN apt-get -qq update && \
   apt-get install --yes --no-install-recommends openssh-client  \
         less \
+	owncloud-client \	
         texlive-latex-base \
 	texlive-latex-recommended \
 	texlive-science \
@@ -38,7 +47,8 @@ RUN apt-get -qq update && \
  	texlive-lang-german \
 	lmodern \
 	dvipng \
-	ghostscript && \
+	ghostscript \
+        latexmk && \
   apt-get install --yes --no-install-recommends manpages man-db coreutils lsb-release lsb-core nano vim emacs tree  && \
   apt-get -qq purge && \
   apt-get -qq clean && \
