@@ -33,12 +33,18 @@ RUN wget -nv https://download.opensuse.org/repositories/isv:ownCloud:desktop/Ubu
 RUN apt-key add - < Release.key
 
 
+# add sciebo
+RUN wget -nv https://www.sciebo.de/install/linux/Ubuntu_18.04/Release.key -O - | apt-key add -
+
+
+
 # Run assemble scripts! These will actually build the specification
 # in the repository into the image.
 RUN apt-get -qq update && \
   apt-get install --yes --no-install-recommends openssh-client  \
         less \
 	owncloud-client \	
+        sciebo-client \
         texlive-latex-base \
 	texlive-latex-recommended \
 	texlive-science \
