@@ -35,7 +35,7 @@ RUN apt-key add - < Release.key
 
 # add sciebo
 RUN wget -nv https://www.sciebo.de/install/linux/Ubuntu_18.04/Release.key -O - | apt-key add -
-
+RUN echo 'deb https://www.sciebo.de/install/linux/Ubuntu_18.04/ /' | tee -a /etc/apt/sources.list.d/sciebo.list
 
 
 # Run assemble scripts! These will actually build the specification
