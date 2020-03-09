@@ -45,6 +45,7 @@ RUN apt-get -qq update && \
         less \
 	owncloud-client \	
         sciebo-client \
+	iputils-ping \
         texlive-latex-base \
 	texlive-latex-recommended \
 	texlive-science \
