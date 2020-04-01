@@ -95,8 +95,6 @@ RUN conda install numpy matplotlib scipy astropy sympy --yes
 
 RUN conda install scikit-image scikit-learn seaborn --yes
 
-COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
-
 RUN conda install -y nodejs --yes
 RUN pip install ipympl jupyterlab_latex
 
@@ -116,3 +114,6 @@ RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
+
+# copy the generell nbgrader configuration
+#COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
