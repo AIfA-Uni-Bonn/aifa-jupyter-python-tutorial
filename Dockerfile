@@ -43,6 +43,7 @@ RUN echo 'deb https://www.sciebo.de/install/linux/Ubuntu_18.04/ /' | tee -a /etc
 RUN apt-get -qq update && \
   apt-get install --yes --no-install-recommends openssh-client  \
         less \
+	inotify-tools \
 	owncloud-client \	
         sciebo-client \
 	iputils-ping \
