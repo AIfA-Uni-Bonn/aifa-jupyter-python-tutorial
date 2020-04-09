@@ -145,9 +145,13 @@ else
         echo 'Container must be run as root to grant sudo permissions'
     fi
 
+    # execute the setup script in the shared environment
+    if [[ -x /home/shared/setup/setup.sh ]]; then
+       . /home/shared/setup/setup.sh
+    fi
     # link the tutorial in the shared volume
-    rm -f ${HOME}/tutorial
-    ln -s /home/shared/python-tutorial/tutorial ${HOME}/tutorial
+    #rm -f ${HOME}/tutorial
+    #ln -s /home/shared/python-tutorial/tutorial ${HOME}/tutorial
 
     # set the USER variable to mimik a normal linux environment
     export USER=$(whoami)
