@@ -106,8 +106,11 @@ RUN conda clean -a -y
 RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
 
 
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build 
-RUN jupyter labextension install jupyter-matplotlib --no-build
+#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build 
+#RUN jupyter labextension install jupyter-matplotlib --no-build
+
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib
+
 RUN jupyter nbextension enable --py widgetsnbextension
 
 RUN jupyter labextension install @jupyterlab/latex  --no-build
