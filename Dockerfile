@@ -46,6 +46,9 @@ RUN apt-get -qq update && \
 	inotify-tools \
 	owncloud-client \	
         sciebo-client \
+        sextractor \
+        scamp \
+        swarp \
 	iputils-ping \
         texlive-latex-base \
 	texlive-latex-recommended \
@@ -117,7 +120,9 @@ RUN jupyter labextension install @jupyterlab/latex  --no-build
 RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
-RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
+RUN echo "" >> /etc/jupyter/jupyter_notebook_config.py
+#RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
+RUN echo "c.LatexConfig.latex_command = 'latexmk -pdf'" >> /etc/jupyter/jupyter_notebook_config.py
 
 # copy the generell nbgrader configuration
 #COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
