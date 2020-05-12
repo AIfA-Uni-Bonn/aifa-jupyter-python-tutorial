@@ -56,6 +56,19 @@ RUN apt-get -qq update && \
 	texlive-latex-extra \
 	texlive-fonts-recommended \
  	texlive-lang-german \
+	texlive-bibtex-extra \
+	texlive-extra-utils \
+	texlive-fonts-extra \
+	texlive-fonts-extra-links \
+	texlive-fonts-recommended \
+	texlive-formats-extra \
+	texlive-generic-extra \
+	texlive-humanities \
+	texlive-luatex \
+	texlive-metapost \
+	texlive-pictures \
+	texlive-pstricks \
+	texlive-publishers \
 	lmodern \
 	dvipng \
 	ghostscript \
