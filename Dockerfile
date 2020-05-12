@@ -69,6 +69,7 @@ RUN apt-get -qq update && \
 	texlive-pictures \
 	texlive-pstricks \
 	texlive-publishers \
+	biber \
 	lmodern \
 	dvipng \
 	ghostscript \
@@ -135,6 +136,7 @@ RUN jupyter lab build
 
 RUN echo "" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
+RUN echo "c.LatexConfig.bib_command = 'biber'" >> /etc/jupyter/jupyter_notebook_config.py
 #RUN echo "c.LatexConfig.latex_command = 'latexmk -pdf'" >> /etc/jupyter/jupyter_notebook_config.py
 
 # copy the generell nbgrader configuration
