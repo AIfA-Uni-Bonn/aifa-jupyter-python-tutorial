@@ -111,7 +111,7 @@ RUN conda install rise --no-deps --yes
 RUN conda install numpy matplotlib scipy astropy sympy --yes 
 
 
-RUN conda install scikit-image scikit-learn seaborn --yes
+RUN conda install scikit-image scikit-learn seaborn colorama pandas --yes
 
 RUN conda install -y nodejs --yes
 RUN pip install ipympl jupyterlab_latex
