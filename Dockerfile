@@ -69,6 +69,7 @@ RUN apt-get -qq update && \
 	texlive-pictures \
 	texlive-pstricks \
 	texlive-publishers \
+        cm-super \
 	biber \
 	lmodern \
 	dvipng \
