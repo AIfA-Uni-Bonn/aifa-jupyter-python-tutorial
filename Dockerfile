@@ -142,3 +142,5 @@ RUN echo "c.LatexConfig.bib_command = 'biber'" >> /etc/jupyter/jupyter_notebook_
 
 # copy the generell nbgrader configuration
 #COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
+# last some useful packages
+RUN conda install version_information --yes
