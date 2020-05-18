@@ -74,7 +74,8 @@ RUN apt-get -qq update && \
 	lmodern \
 	dvipng \
 	ghostscript \
-        latexmk && \
+        latexmk \
+        ffmpeg && \
   apt-get install --yes --no-install-recommends manpages man-db coreutils lsb-release lsb-core nano vim emacs tree  && \
   apt-get -qq purge && \
   apt-get -qq clean && \
