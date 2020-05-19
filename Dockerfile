@@ -94,6 +94,13 @@ USER $NB_UID
 # The conda-forge channel is already present in the system .condarc file, so there is no need to
 # add a channel invocation in any of the next commands.
 
+# 2020-05-19
+# update jupyterlab -> the default was 1.1.3 which has problems
+# with Safari and Edge browsers
+# the available version 1.2.15 works with Safari, Edge not tested
+RUN conda install jupyterlab
+
+
 # Add nbgrader 0.5.5 to the image
 # More info at https://nbgrader.readthedocs.io/en/stable/
 
@@ -128,7 +135,7 @@ RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
 #RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build 
 #RUN jupyter labextension install jupyter-matplotlib --no-build
 
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib --no-build 
 
 RUN jupyter nbextension enable --py widgetsnbextension
 
