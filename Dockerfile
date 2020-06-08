@@ -98,7 +98,7 @@ USER $NB_UID
 # update jupyterlab -> the default was 1.1.3 which has problems
 # with Safari and Edge browsers
 # the available version 1.2.15 works with Safari, Edge not tested
-RUN conda install jupyterlab
+RUN conda install jupyterlab=2.0.2
 
 
 # Add nbgrader 0.5.5 to the image
@@ -129,17 +129,14 @@ RUN pip install ipympl jupyterlab_latex
 RUN conda clean -a -y
 
 # enable top buttons for jupyter lab
-RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
+##RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
 
-
-#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build 
-#RUN jupyter labextension install jupyter-matplotlib --no-build
 
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib --no-build 
 
 RUN jupyter nbextension enable --py widgetsnbextension
 
-RUN jupyter labextension install @jupyterlab/latex  --no-build
+RUN jupyter labextension install worker-loader module @jupyterlab/latex  --no-build
 RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
