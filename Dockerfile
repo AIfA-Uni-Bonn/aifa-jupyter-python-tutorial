@@ -122,8 +122,7 @@ RUN conda install numpy matplotlib scipy astropy sympy --yes
 
 RUN conda install scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes
 
-RUN conda install -y nodejs --yes
-RUN pip install ipympl jupyterlab_latex
+RUN conda  install ipympl jupyterlab_latex
 
 # remove all unwanted stuff
 RUN conda clean -a -y
@@ -138,8 +137,8 @@ RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib --no-build 
 
 RUN jupyter nbextension enable --py widgetsnbextension
-
-RUN jupyter labextension install @jupyterlab/latex  --no-build
+RUN jupyter labextension install worker-loader module --no-build
+###RUN jupyter labextension install @jupyterlab/latex  --no-build
 RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
