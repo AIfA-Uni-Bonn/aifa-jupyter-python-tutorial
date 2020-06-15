@@ -98,7 +98,7 @@ USER $NB_UID
 # update jupyterlab -> the default was 1.1.3 which has problems
 # with Safari and Edge browsers
 # the available version 1.2.15 works with Safari, Edge not tested
-RUN conda install jupyterlab=2.0.2
+RUN conda install jupyterlab=1.2.15 --yes
 
 
 # Add nbgrader 0.5.5 to the image
@@ -122,21 +122,20 @@ RUN conda install numpy matplotlib scipy astropy sympy --yes
 
 RUN conda install scikit-image scikit-learn seaborn colorama pandas pyhdf h5py --yes
 
-RUN conda install -y nodejs --yes
-RUN pip install ipympl jupyterlab_latex
+RUN conda install nodejs ipympl jupyterlab_latex version_information --yes
 
 # remove all unwanted stuff
 RUN conda clean -a -y
 
 # enable top buttons for jupyter lab
-##RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
+RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
 
 
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib --no-build 
 
 RUN jupyter nbextension enable --py widgetsnbextension
 
-RUN jupyter labextension install worker-loader module @jupyterlab/latex  --no-build
+RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
 RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
@@ -147,5 +146,3 @@ RUN echo "c.LatexConfig.run_times = 2" >> /etc/jupyter/jupyter_notebook_config.p
 
 # copy the generell nbgrader configuration
 #COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
-# last some useful packages
-RUN conda install version_information --yes
