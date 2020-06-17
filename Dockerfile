@@ -138,7 +138,7 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-mat
 
 RUN jupyter nbextension enable --py widgetsnbextension
 RUN jupyter labextension install worker-loader module --no-build
-###RUN jupyter labextension install @jupyterlab/latex  --no-build
+RUN jupyter labextension install @jupyterlab/latex  --no-build
 RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
