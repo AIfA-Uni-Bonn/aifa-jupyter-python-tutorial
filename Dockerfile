@@ -120,7 +120,7 @@ RUN conda install rise --no-deps --yes
 RUN conda install numpy matplotlib scipy astropy sympy --yes 
 
 
-RUN conda install scikit-image scikit-learn seaborn colorama pandas pyhdf h5py --yes
+RUN conda install scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes
 
 RUN conda install nodejs ipympl jupyterlab_latex version_information --yes
 
@@ -136,6 +136,8 @@ RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-mat
 RUN jupyter nbextension enable --py widgetsnbextension
 
 RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
+#RUN jupyter labextension install worker-loader module --no-build
+#RUN jupyter labextension install @jupyterlab/latex@v1.0.0  --no-build
 RUN jupyter lab build
 # RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
