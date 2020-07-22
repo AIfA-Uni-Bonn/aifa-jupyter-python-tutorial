@@ -11,11 +11,21 @@ FROM jupyter/minimal-notebook:ea01ec4d9f57
 # inspired by: 
 # https://github.com/umsi-mads/education-notebook/blob/master/Dockerfile 
 
+
+
+LABEL maintainer="AIfA Jupyter Project <ocordes@astro.uni-bonn.de>"
+
+
 # Do here all steps as root
 USER root
 
 RUN chgrp users /etc/passwd
 RUN echo "nbgrader:x:2000:" >> /etc/group
+
+# run the unminimizer
+COPY  unminimize.aifa /usr/local/sbin/unminimize.aifa
+RUN chmod 755 /usr/local/sbin/unminimize.aifa
+RUN unminimize.aifa
 
 # fix the BUG in Ubuntu focal image
 #RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man\/*' /etc/dpkg/dpkg.cfg.d/excludes
@@ -84,6 +94,13 @@ RUN apt-get -qq update && \
   apt-get -qq clean && \
   rm -rf /var/lib/apt/lists/*
 
+# handling nodejs, since all versions from conda and ubuntu itself
+# are outdated
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+#RUN apt-get update
+RUN apt-get install -y nodejs
+
+
 
 # use this for debugging in the case of UID/GID problems
 COPY start.sh /usr/local/bin/start.sh
@@ -102,13 +119,13 @@ USER $NB_UID
 # with Safari and Edge browsers
 # the available version 1.2.15 works with Safari, Edge not tested
 #RUN conda install jupyterlab=1.2.15 --yes
-#RUN conda install jupyterlab --yes
+RUN conda install jupyterlab=2.2.0  --yes
 
 
-# Add nbgrader 0.5.5 to the image
+# Add nbgrader 0.6.1 to the image
 # More info at https://nbgrader.readthedocs.io/en/stable/
 
-RUN conda install nbgrader --yes
+RUN conda install nbgrader=0.6.1 --yes
 
 
 # Add the notebook extensions
@@ -121,30 +138,51 @@ RUN conda install rise --no-deps --yes
 
 
 # Add the science packages for AIfA
-RUN conda install numpy matplotlib scipy astropy sympy --yes 
+RUN conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes
 
 
-RUN conda install scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes
-
-RUN conda install nodejs ipympl jupyterlab_latex version_information --yes
+# add extensions by conda
+RUN conda install ipywidgets ipyevents ipympl jupyterlab_latex version_information --yes
 
 # remove all unwanted stuff
 RUN conda clean -a -y
 
-# enable top buttons for jupyter lab
-#RUN jupyter labextension install @fissio/hub-topbar-buttons --no-build
+
+# handling nodejs, since all versions from conda and ubuntu itself
+# are outdated
+RUN conda uninstall nodejs --yes
 
 
-#RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager 
-#RUN jupyter labextension jupyter-matplotlib
+# jupyterlab extensions
+
+# workaround some installation problems on linux ...
+#RUN jupyter labextension install --debug worker-loader module
+
+# container extension
+RUN jupyter labextension install jupyterlab-topbar-extension --no-build
+
+# memory display in bottom line
+RUN pip install nbresuse
+
+
+# condadd a logout button
+RUN jupyter labextension install jupyterlab-logout --no-build
+
+# theme toggling extension
+RUN jupyter labextension install jupyterlab-theme-toggle --no-build
+
+# interactive widgets
+RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
+
+RUN jupyter labextension install jupyter-matplotlib --no-build
 
 RUN jupyter nbextension enable --py widgetsnbextension
 
 #RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
-#RUN jupyter labextension install worker-loader module --no-build
-#RUN jupyter labextension install @jupyterlab/latex@v1.0.0  --no-build
-#RUN jupyter lab build
-# RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
+RUN jupyter labextension install worker-loader module --no-build
+RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
+RUN jupyter lab build --debug
+RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
 RUN echo "" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
