@@ -94,11 +94,11 @@ RUN apt-get -qq update && \
   apt-get -qq clean && \
   rm -rf /var/lib/apt/lists/*
 
-# handling nodejs, since all versions from conda and ubuntu itself
-# are outdated
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-#RUN apt-get update
-RUN apt-get install -y nodejs
+## handling nodejs, since all versions from conda and ubuntu itself
+## are outdated
+#RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+##RUN apt-get update
+#RUN apt-get install -y nodejs
 
 
 
@@ -121,6 +121,7 @@ USER $NB_UID
 #RUN conda install jupyterlab=1.2.15 --yes
 RUN conda install jupyterlab=2.2.0  --yes
 
+#RUN conda install jupyterhub --yes
 
 # Add nbgrader 0.6.1 to the image
 # More info at https://nbgrader.readthedocs.io/en/stable/
@@ -150,7 +151,7 @@ RUN conda clean -a -y
 
 # handling nodejs, since all versions from conda and ubuntu itself
 # are outdated
-RUN conda uninstall nodejs --yes
+##RUN conda uninstall nodejs --yes
 
 
 # jupyterlab extensions
