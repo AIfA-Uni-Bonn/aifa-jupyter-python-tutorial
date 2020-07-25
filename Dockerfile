@@ -180,9 +180,13 @@ RUN jupyter labextension install jupyter-matplotlib --no-build
 RUN jupyter nbextension enable --py widgetsnbextension
 
 #RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
-RUN jupyter labextension install worker-loader module --no-build
+
+
+# install @jupyterlablatex which is buggy ...
 RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
+COPY patches/jupyterlab-latex-2.0.0.tgz /opt/conda/share/jupyter/lab/extensions/jupyterlab-latex-2.0.0.tgz
 RUN jupyter lab build --debug
+
 RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
 RUN echo "" >> /etc/jupyter/jupyter_notebook_config.py
