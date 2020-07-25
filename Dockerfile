@@ -175,16 +175,27 @@ RUN jupyter labextension install jupyterlab-theme-toggle --no-build
 # interactive widgets
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 
+# matplotlib extension
 RUN jupyter labextension install jupyter-matplotlib --no-build
 
+# jupyter classic extensions
 RUN jupyter nbextension enable --py widgetsnbextension
-
-#RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
 
 
 # install @jupyterlablatex which is buggy ...
 RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
 COPY patches/jupyterlab-latex-2.0.0.tgz /opt/conda/share/jupyter/lab/extensions/jupyterlab-latex-2.0.0.tgz
+
+# jupyterlab spellchecker
+RUN jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build
+
+# jupyterlab tocs
+RUN jupyter labextension install @jupyterlab/toc --no-build
+
+# jupyterlab variable inspector
+RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
+
+# compile all extensions
 RUN jupyter lab build --debug
 
 RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
