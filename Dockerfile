@@ -200,6 +200,8 @@ RUN jupyter lab build --debug
 
 RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
 
+# apply the latex configuration
+
 RUN echo "" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "c.LatexConfig.bib_command = 'biber'" >> /etc/jupyter/jupyter_notebook_config.py
@@ -207,3 +209,10 @@ RUN echo "c.LatexConfig.run_times = 2" >> /etc/jupyter/jupyter_notebook_config.p
 
 # copy the generell nbgrader configuration
 #COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
+
+
+# install additional kernels
+
+RUN pip install calysto_bash
+
+# Done.
