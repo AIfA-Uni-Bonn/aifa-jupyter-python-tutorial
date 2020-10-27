@@ -143,7 +143,8 @@ RUN conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn
 
 
 # add extensions by conda
-RUN conda install ipywidgets ipyevents ipympl jupyterlab_latex version_information --yes
+RUN conda install ipywidgets ipyevents ipympl jupyterlab_latex --yes
+RUN conda install version_information jupyter-archive --yes
 
 # remove all unwanted stuff
 RUN conda clean -a -y
