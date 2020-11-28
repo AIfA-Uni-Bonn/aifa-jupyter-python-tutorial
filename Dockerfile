@@ -187,8 +187,8 @@ RUN jupyter nbextension enable --py widgetsnbextension
 RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
 COPY patches/jupyterlab-latex-2.0.0.tgz /opt/conda/share/jupyter/lab/extensions/jupyterlab-latex-2.0.0.tgz
 
-# jupyterlab spellchecker
-RUN jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build
+# jupyterlab spellchecker (ocordes variant)
+RUN jupyter labextension install @ocordes/jupyterlab_spellchecker --no-build
 
 # jupyterlab tocs
 RUN jupyter labextension install @jupyterlab/toc --no-build
