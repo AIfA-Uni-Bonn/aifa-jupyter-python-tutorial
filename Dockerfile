@@ -63,6 +63,7 @@ RUN apt-get -qq update && \
         sextractor \
         scamp \
         swarp \
+	zip \
 	iputils-ping \
         texlive-latex-base \
 	texlive-latex-recommended \
