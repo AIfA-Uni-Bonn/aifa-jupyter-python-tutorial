@@ -89,11 +89,14 @@ RUN apt-get -qq update && \
 	dvipng \
 	ghostscript \
         latexmk \
-        ffmpeg && \
+        ffmpeg \
+	imagemagick && \
   apt-get install --yes --no-install-recommends manpages man-db coreutils lsb-release lsb-core nano vim emacs tree  && \
   apt-get -qq purge && \
   apt-get -qq clean && \
   rm -rf /var/lib/apt/lists/*
+
+COPY policy.xml /etc/ImageMagick-6/
 
 ## handling nodejs, since all versions from conda and ubuntu itself
 ## are outdated
