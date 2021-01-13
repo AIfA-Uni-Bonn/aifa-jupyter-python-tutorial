@@ -146,6 +146,11 @@ RUN conda install rise --no-deps --yes
 RUN conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes
 
 
+# Add kafe for python fitting
+RUN pip install kafe
+RUN pip install 'iminuit<2'
+
+
 # add extensions by conda
 RUN conda install ipywidgets ipyevents ipympl jupyterlab_latex --yes
 RUN conda install version_information jupyter-archive jupyterlab-git --yes
@@ -171,7 +176,7 @@ RUN jupyter labextension install jupyterlab-topbar-extension --no-build
 RUN pip install nbresuse
 
 
-# condadd a logout button
+# add a logout button
 RUN jupyter labextension install jupyterlab-logout --no-build
 
 # theme toggling extension
@@ -181,15 +186,17 @@ RUN jupyter labextension install jupyterlab-theme-toggle --no-build
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 
 # matplotlib extension
-RUN jupyter labextension install jupyter-matplotlib --no-build
+RUN jupyter labextension install jupyter-matplotlib@0.7.4 --no-build
 
 # jupyter classic extensions
 RUN jupyter nbextension enable --py widgetsnbextension
 
 
 # install @jupyterlablatex which is buggy ...
-RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
-COPY patches/jupyterlab-latex-2.0.0.tgz /opt/conda/share/jupyter/lab/extensions/jupyterlab-latex-2.0.0.tgz
+#RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
+#COPY patches/jupyterlab-latex-2.0.0.tgz /opt/conda/share/jupyter/lab/extensions/jupyterlab-latex-2.0.0.tgz
+
+RUN jupyter labextension install @jupyterlab/latex --no-build
 
 # jupyterlab spellchecker (ocordes variant)
 RUN jupyter labextension install @ocordes/jupyterlab_spellchecker --no-build
