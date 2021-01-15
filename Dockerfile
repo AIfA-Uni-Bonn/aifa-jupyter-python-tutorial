@@ -148,6 +148,7 @@ RUN conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn
 
 # Add kafe for python fitting
 RUN pip install kafe
+RUN pip install kafe2
 RUN pip install 'iminuit<2'
 
 
