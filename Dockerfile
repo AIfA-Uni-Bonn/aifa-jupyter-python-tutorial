@@ -1,9 +1,12 @@
 # written: 2019-06-18
 
 # taking the latest image
-# July 13 2020 
-FROM jupyter/minimal-notebook:ea01ec4d9f57
 
+# Mar 29 2021
+FROM jupyter/minimal-notebook:4d9c9bd9ced0
+
+## July 13 2020 
+#FROM jupyter/minimal-notebook:ea01ec4d9f57
 
 ## Sep. 11 2019
 #FROM jupyter/minimal-notebook:1386e2046833  
@@ -31,10 +34,6 @@ RUN unminimize.aifa
 #RUN sed -i '/path-exclude=\/usr\/share\/man\/*/c\#path-exclude=\/usr\/share\/man\/*' /etc/dpkg/dpkg.cfg.d/excludes
 RUN   apt-get -qq update && \
   apt-get install --yes --no-install-recommends man manpages-posix
-
-#RUN  dpkg -l | grep ^ii | cut -d' ' -f3 | xargs apt-get install -y --reinstall && \
-#  apt-get -qq purge && \
-#  apt-get -qq clean
 
 # necessary for apt-key
 RUN apt update
@@ -118,19 +117,15 @@ USER $NB_UID
 # The conda-forge channel is already present in the system .condarc file, so there is no need to
 # add a channel invocation in any of the next commands.
 
-# 2020-05-19
-# update jupyterlab -> the default was 1.1.3 which has problems
-# with Safari and Edge browsers
-# the available version 1.2.15 works with Safari, Edge not tested
-#RUN conda install jupyterlab=1.2.15 --yes
-RUN conda install jupyterlab=2.2.0  --yes
+# install jupyterlab
+RUN conda install jupyterlab>3.0.0  --yes
 
 #RUN conda install jupyterhub --yes
 
 # Add nbgrader 0.6.1 to the image
 # More info at https://nbgrader.readthedocs.io/en/stable/
 
-RUN conda install nbgrader=0.6.1 --yes
+#RUN conda install nbgrader=0.6.1 --yes
 
 
 # Add the notebook extensions
@@ -147,9 +142,9 @@ RUN conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn
 
 
 # Add kafe for python fitting
-#RUN pip install kafe
 RUN pip install kafe2
-RUN pip install 'iminuit<2'
+RUN pip install 'iminuit>2'
+RUN pip install PhyPraKit
 
 
 # Add meteostat package
@@ -169,20 +164,18 @@ RUN conda clean -a -y
 ##RUN conda uninstall nodejs --yes
 
 
+
+
 # jupyterlab extensions
 
-# workaround some installation problems on linux ...
-#RUN jupyter labextension install --debug worker-loader module
-
-# container extension
-RUN jupyter labextension install jupyterlab-topbar-extension --no-build
+# topbar
+RUN pip install jupyterlab-topbar
 
 # memory display in bottom line
-RUN pip install nbresuse
-
+RUN conda install nbresuse
 
 # add a logout button
-RUN jupyter labextension install jupyterlab-logout --no-build
+#RUN jupyter labextension install jupyterlab-logout --no-build
 
 # theme toggling extension
 RUN jupyter labextension install jupyterlab-theme-toggle --no-build
@@ -191,31 +184,29 @@ RUN jupyter labextension install jupyterlab-theme-toggle --no-build
 RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 
 # matplotlib extension
-RUN jupyter labextension install jupyter-matplotlib@0.7.4 --no-build
+RUN jupyter labextension install jupyter-matplotlib@ --no-build
 
 # jupyter classic extensions
 RUN jupyter nbextension enable --py widgetsnbextension
 
 
-# install @jupyterlablatex which is buggy ...
-#RUN jupyter labextension install @jupyterlab/latex@v2.0.0  --no-build
-#COPY patches/jupyterlab-latex-2.0.0.tgz /opt/conda/share/jupyter/lab/extensions/jupyterlab-latex-2.0.0.tgz
-
-RUN jupyter labextension install @jupyterlab/latex --no-build
-
-# jupyterlab spellchecker (ocordes variant)
-RUN jupyter labextension install @ocordes/jupyterlab_spellchecker --no-build
-
 # jupyterlab tocs
 RUN jupyter labextension install @jupyterlab/toc --no-build
 
 # jupyterlab variable inspector
-RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
+#RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
 
 # compile all extensions
 RUN jupyter lab build --debug
 
-RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
+#RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
+
+
+# install the spellchecker
+RUN pip install jupyterlab-spellchecker
+
+# install latex extension
+RUN pip install jupyterlab-latex
 
 # apply the latex configuration
 
@@ -229,7 +220,15 @@ RUN echo "c.LatexConfig.run_times = 2" >> /etc/jupyter/jupyter_notebook_config.p
 
 
 # install additional kernels
-
 RUN pip install calysto_bash
+
+# install javascript/Typescript kernel
+#RUN conda install nodejs
+#RUN which npm
+RUN npm install  tslab
+RUN which npm
+RUN find / -name "*tslab*"
+RUN which tslab
+# RUN /opt/conda/node_modules/tslab/bin/tslab install --prefix /opt/conda
 
 # Done.
