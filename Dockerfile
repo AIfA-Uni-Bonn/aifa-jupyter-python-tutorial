@@ -3,7 +3,8 @@
 # taking the latest image
 
 # Mar 29 2021
-FROM jupyter/minimal-notebook:4d9c9bd9ced0
+#FROM jupyter/minimal-notebook:4d9c9bd9ced0
+FROM jupyter/minimal-notebook:12ba1d59fbc3
 
 ## July 13 2020 
 #FROM jupyter/minimal-notebook:ea01ec4d9f57
@@ -168,14 +169,12 @@ RUN conda clean -a -y
 
 # jupyterlab extensions
 
-# topbar
+# topbar / logout button
 RUN pip install jupyterlab-topbar
+RUN pip install jupyterlab-logout
 
 # memory display in bottom line
 RUN conda install nbresuse
-
-# add a logout button
-#RUN jupyter labextension install jupyterlab-logout --no-build
 
 # theme toggling extension
 RUN jupyter labextension install jupyterlab-theme-toggle --no-build
@@ -191,7 +190,7 @@ RUN jupyter nbextension enable --py widgetsnbextension
 
 
 # jupyterlab tocs
-RUN jupyter labextension install @jupyterlab/toc --no-build
+#RUN jupyter labextension install @jupyterlab/toc --no-build
 
 # jupyterlab variable inspector
 #RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
@@ -226,9 +225,9 @@ RUN pip install calysto_bash
 #RUN conda install nodejs
 #RUN which npm
 RUN npm install  tslab
-RUN which npm
-RUN find / -name "*tslab*"
-RUN which tslab
+#RUN which npm
+#RUN find / -name "*tslab*"
+#RUN which tslab
 # RUN /opt/conda/node_modules/tslab/bin/tslab install --prefix /opt/conda
 
 # Done.
