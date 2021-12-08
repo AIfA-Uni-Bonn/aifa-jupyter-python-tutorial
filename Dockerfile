@@ -1,10 +1,21 @@
 # written: 2019-06-18
 
+# Software:
+# - jupyterlab 3.2.4
+# - numpy      latest
+# - scipy      latest
+# - kafe2      >2.4.0
+
+
 # taking the latest image
+
+# Nov 20 2021
+FROM jupyter/minimal-notebook:2021-11-20
+
 
 # Mar 29 2021
 #FROM jupyter/minimal-notebook:4d9c9bd9ced0
-FROM jupyter/minimal-notebook:12ba1d59fbc3
+#FROM jupyter/minimal-notebook:12ba1d59fbc3
 
 ## July 13 2020 
 #FROM jupyter/minimal-notebook:ea01ec4d9f57
@@ -119,7 +130,7 @@ USER $NB_UID
 # add a channel invocation in any of the next commands.
 
 # install jupyterlab
-RUN conda install jupyterlab>3.0.0  --yes
+RUN conda install jupyterlab=3.2.4  --yes
 
 #RUN conda install jupyterhub --yes
 
