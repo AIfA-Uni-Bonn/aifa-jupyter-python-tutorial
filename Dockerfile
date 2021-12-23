@@ -219,6 +219,7 @@ RUN apt-get -y update \
    texstudio \
    xterm \
    emacs \
+   gnome-terminal \
  && apt-get -qq purge \
  && apt-get -qq clean \
  && rm -rf /var/lib/apt/lists/*
