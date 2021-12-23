@@ -131,117 +131,78 @@ USER $NB_UID
 # add a channel invocation in any of the next commands.
 
 # install jupyterlab
-RUN conda install jupyterlab=3.2.4  --yes
+RUN conda install jupyterlab=3.2.4  --yes && \
+	# Add nbgrader 0.6.1 to the image
+	# More info at https://nbgrader.readthedocs.io/en/stable/
+        # conda install nbgrader=0.6.1 --yes &6 \
+	# Add the notebook extensions
+	conda install jupyter_contrib_nbextensions --yes && \
 
-#RUN conda install jupyterhub --yes
-
-# Add nbgrader 0.6.1 to the image
-# More info at https://nbgrader.readthedocs.io/en/stable/
-
-#RUN conda install nbgrader=0.6.1 --yes
-
-
-# Add the notebook extensions
-RUN conda install jupyter_contrib_nbextensions --yes
-
-# Add RISE 5.4.1 to the mix as well so user can show live slideshows from their notebooks
-# More info at https://rise.readthedocs.io
-# Note: Installing RISE with --no-deps because all the neeeded deps are already present.
-RUN conda install rise --no-deps --yes
+	# Add RISE 5.4.1 to the mix as well so user can show live slideshows from their notebooks
+	# More info at https://rise.readthedocs.io
+	# Note: Installing RISE with --no-deps because all the neeeded deps are already present.
+	conda install rise --no-deps --yes && \
 
 
-# Add the science packages for AIfA
-RUN conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes
+	# Add the science packages for AIfA
+	conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes && \
+
+	# Add kafe for python fitting
+	pip install kafe2 'iminuit>2' PhyPraKit && \
+
+	# Add meteostat package
+	pip install meteostat && \
+
+	# add extensions by conda
+	conda install ipywidgets ipyevents ipympl jupyterlab_latex --yes && \
+	conda install version_information jupyter-archive jupyterlab-git --yes && \
+
+	# jupyterlab extensions
+
+	# topbar / logout button
+	pip install jupyterlab-topbar jupyterlab-logout && \
+
+	# memory display in bottom line
+	conda install nbresuse && \
+
+	# theme toggling extension
+	# interactive widgets
+	# matplotlib extension
+	# jupyter classic extensions
+
+        jupyter labextension install jupyterlab-theme-toggle @jupyter-widgets/jupyterlab-manager jupyter-matplotlib@ --no-build && \
+	jupyter nbextension enable --py widgetsnbextension && \
 
 
-# Add kafe for python fitting
-RUN pip install kafe2
-RUN pip install 'iminuit>2'
-RUN pip install PhyPraKit
+	# jupyterlab tocs
+	#jupyter labextension install @jupyterlab/toc --no-build && \
+
+	# jupyterlab variable inspector
+	#jupyter labextension install @lckr/jupyterlab_variableinspector --no-build && \
+
+	# compile all extensions
+	jupyter lab build --debug && \
 
 
-# Add meteostat package
-RUN pip install meteostat
+	# install the spellchecker
+	pip install jupyterlab-spellchecker jupyterlab-latex && \
+
+	# apply the latex configuration
+
+	echo "" >> /etc/jupyter/jupyter_notebook_config.py && \
+	echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py && \
+	echo "c.LatexConfig.bib_command = 'biber'" >> /etc/jupyter/jupyter_notebook_config.py && \
+	echo "c.LatexConfig.run_times = 2" >> /etc/jupyter/jupyter_notebook_config.py && \
+
+	# copy the generell nbgrader configuration
+	#COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
 
 
-# add extensions by conda
-RUN conda install ipywidgets ipyevents ipympl jupyterlab_latex --yes
-RUN conda install version_information jupyter-archive jupyterlab-git --yes
+	# install additional kernels
+	pip install calysto_bash && \
 
-# remove all unwanted stuff
-RUN conda clean -a -y
-
-
-# handling nodejs, since all versions from conda and ubuntu itself
-# are outdated
-##RUN conda uninstall nodejs --yes
-
-
-
-
-# jupyterlab extensions
-
-# topbar / logout button
-RUN pip install jupyterlab-topbar
-RUN pip install jupyterlab-logout
-
-# memory display in bottom line
-RUN conda install nbresuse
-
-# theme toggling extension
-RUN jupyter labextension install jupyterlab-theme-toggle --no-build
-
-# interactive widgets
-RUN jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
-
-# matplotlib extension
-RUN jupyter labextension install jupyter-matplotlib@ --no-build
-
-# jupyter classic extensions
-RUN jupyter nbextension enable --py widgetsnbextension
-
-
-# jupyterlab tocs
-#RUN jupyter labextension install @jupyterlab/toc --no-build
-
-# jupyterlab variable inspector
-#RUN jupyter labextension install @lckr/jupyterlab_variableinspector --no-build
-
-# compile all extensions
-RUN jupyter lab build --debug
-
-#RUN jupyter serverextension enable --sys-prefix jupyterlab_latex
-
-
-# install the spellchecker
-RUN pip install jupyterlab-spellchecker
-
-# install latex extension
-RUN pip install jupyterlab-latex
-
-# apply the latex configuration
-
-RUN echo "" >> /etc/jupyter/jupyter_notebook_config.py
-RUN echo "c.LatexConfig.latex_command = 'pdflatex'" >> /etc/jupyter/jupyter_notebook_config.py
-RUN echo "c.LatexConfig.bib_command = 'biber'" >> /etc/jupyter/jupyter_notebook_config.py
-RUN echo "c.LatexConfig.run_times = 2" >> /etc/jupyter/jupyter_notebook_config.py
-
-# copy the generell nbgrader configuration
-#COPY nbgrader_config.py /etc/jupyter/nbgrader_config.py
-
-
-# install additional kernels
-RUN pip install calysto_bash
-
-# install javascript/Typescript kernel
-#RUN conda install nodejs
-#RUN which npm
-RUN npm install  tslab
-#RUN which npm
-#RUN find / -name "*tslab*"
-#RUN which tslab
-# RUN /opt/conda/node_modules/tslab/bin/tslab install --prefix /opt/conda
-
+	# remove all unwanted stuff
+	conda clean -a -y
 
 # add the jupyter XFCE desktop
 USER root
@@ -254,7 +215,11 @@ RUN apt-get -y update \
    xfce4-session \
    xfce4-settings \
    xorg \
-   xubuntu-icon-theme \
+   xubuntu-icon-theme \ 
+   texstudio \
+   xterm \
+   emacs \
+ && apt-get -qq purge \
  && apt-get -qq clean \
  && rm -rf /var/lib/apt/lists/*
 
