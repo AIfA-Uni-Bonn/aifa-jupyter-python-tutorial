@@ -220,6 +220,7 @@ RUN apt-get -y update \
    xterm \
    emacs \
    gnome-terminal \
+   evince atril  \
  && apt-get -qq purge \
  && apt-get -qq clean \
  && rm -rf /var/lib/apt/lists/*
@@ -240,4 +241,8 @@ USER $NB_UID
 RUN conda install jupyter-server-proxy>=1.4 websockify
 
 RUN pip install https://github.com/jupyterhub/jupyter-remote-desktop-proxy/archive/refs/heads/main.zip
+
+# overwrite the startup script
+COPY vnc/xstartup /opt/conda/lib/python3.9/site-packages/jupyter_desktop/share/
+
 # Done.
