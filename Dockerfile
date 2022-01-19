@@ -1,5 +1,5 @@
 # written: 2019-06-18
-# changed: 2021-11-
+# changed: 2022-01-19
 
 # Software:
 # - jupyterlab 3.2.4
@@ -200,6 +200,9 @@ RUN conda install jupyterlab=3.2.4  --yes && \
 
 	# install additional kernels
 	pip install calysto_bash && \
+
+	# install spyder
+	conda install spyder && \
 
 	# remove all unwanted stuff
 	conda clean -a -y
