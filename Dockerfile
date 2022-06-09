@@ -1,8 +1,8 @@
 # written: 2019-06-18
-# changed: 2022-01-19
+# changed: 2022-03-22
 
 # Software:
-# - jupyterlab 3.2.4
+# - jupyterlab 3.3.2
 # - numpy      latest
 # - scipy      latest
 # - kafe2      >2.4.0
@@ -10,8 +10,11 @@
 
 # taking the latest image
 
+# Mar 21 2022
+FROM jupyter/minimal-notebook:2022-03-21
+
 # Nov 20 2021
-FROM jupyter/minimal-notebook:2021-11-20
+#FROM jupyter/minimal-notebook:2021-11-20
 
 
 # Mar 29 2021
@@ -131,7 +134,7 @@ USER $NB_UID
 # add a channel invocation in any of the next commands.
 
 # install jupyterlab
-RUN conda install jupyterlab=3.2.4  --yes && \
+RUN conda install jupyterlab=3.3.2  --yes && \
 	# Add nbgrader 0.6.1 to the image
 	# More info at https://nbgrader.readthedocs.io/en/stable/
         # conda install nbgrader=0.6.1 --yes &6 \
@@ -155,7 +158,7 @@ RUN conda install jupyterlab=3.2.4  --yes && \
 
 	# add extensions by conda
 	conda install ipywidgets ipyevents ipympl jupyterlab_latex --yes && \
-	conda install version_information jupyter-archive jupyterlab-git --yes && \
+	conda install version_information jupyter-archive>=3.3.0 jupyterlab-git --yes && \
 
 	# jupyterlab extensions
 
@@ -212,18 +215,18 @@ USER root
 
 RUN apt-get -y update \
  && apt-get install -y dbus-x11 \
-   firefox \
-   xfce4 \
-   xfce4-panel \
-   xfce4-session \
-   xfce4-settings \
+   firefox epiphany-browser \
+   xfce4 xfce4-panel xfce4-session xfce4-settings xfce4-terminal \
    xorg \
+   fuse lftp rsync unrar unzip \
    xubuntu-icon-theme \ 
-   texstudio \
+   libreoffice libreoffice-l10n-de texstudio gnumeric gnupg2 kile  \
    xterm \
-   emacs \
+   emacs kate vim-gtk3 dia gedit geany gnuplot-x11 gnuplot info \
    gnome-terminal \
    evince atril  \
+   codeblocks \
+   gcc g++ gfortran binutils bison flex patch clang ffmpeg gdb m4 mailutils mc  \
  && apt-get -qq purge \
  && apt-get -qq clean \
  && rm -rf /var/lib/apt/lists/*
@@ -243,9 +246,17 @@ USER $NB_UID
 
 RUN conda install jupyter-server-proxy>=1.4 websockify
 
-RUN pip install https://github.com/jupyterhub/jupyter-remote-desktop-proxy/archive/refs/heads/main.zip
+# install jupyter-remote-desktop (fork with all patches and merges)
+#RUN pip install https://github.com/jupyterhub/jupyter-remote-desktop-proxy/archive/refs/heads/main.zip
+# install the fork from ocordes with clipboard patch and deactivated CtrlAltDelete-Button
+RUN pip install https://github.com/ocordes/jupyter-remote-desktop-proxy/archive/refs/heads/main.zip
 
 # overwrite the startup script
 COPY vnc/xstartup /opt/conda/lib/python3.9/site-packages/jupyter_desktop/share/
+
+
+# addon nbgrader development from github
+
+RUN 
 
 # Done.
