@@ -257,6 +257,12 @@ COPY vnc/xstartup /opt/conda/lib/python3.9/site-packages/jupyter_desktop/share/
 
 # addon nbgrader development from github
 
-RUN 
+USER root
+
+RUN wget "https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.67.2-1652812855_amd64.deb" && \
+    apt install ./code_1.67.2-1652812855_amd64.deb && \
+    rm -f ./code_1.67.2-1652812855_amd64.deb
+
+USER $NB_UID
 
 # Done.
