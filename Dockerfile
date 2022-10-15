@@ -1,5 +1,5 @@
 # written: 2019-06-18
-# changed: 2022-03-22
+# changed: 2022-08-11
 
 # Software:
 # - jupyterlab 3.3.2
@@ -105,11 +105,25 @@ RUN apt-get -qq update && \
 	ghostscript \
         latexmk \
         ffmpeg \
-	imagemagick && \
-  apt-get install --yes --no-install-recommends manpages man-db coreutils lsb-release lsb-core nano vim emacs tree  && \
+	imagemagick \
+	manpages \
+	man-db \
+	coreutils \
+	lsb-core \
+	nano \
+	vim  \
+	emacs \
+        tree \
+	libreoffice libreoffice-l10n-en-gb libreoffice-l10n-de \
+        libgbm1 libxkbfile1 \
+        && \
   apt-get -qq purge && \
   apt-get -qq clean && \
   rm -rf /var/lib/apt/lists/*
+
+RUN wget "https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.70.1-1660113095_amd64.deb" && \
+    apt install ./code_1.70.1-1660113095_amd64.deb && \
+    rm -f ./code_1.70.1-1660113095_amd64.deb
 
 COPY policy.xml /etc/ImageMagick-6/
 
@@ -255,14 +269,16 @@ RUN pip install https://github.com/ocordes/jupyter-remote-desktop-proxy/archive/
 COPY vnc/xstartup /opt/conda/lib/python3.9/site-packages/jupyter_desktop/share/
 
 
+# test configuration for the praktikum physik 2022-10--15
+RUN conda install lmfit && \
+    # remove all unwanted stuff
+    conda clean -a -y
+RUN pip install git+https://github.com/proplot-dev/proplot.git
+
+
 # addon nbgrader development from github
 
-USER root
-
-RUN wget "https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.67.2-1652812855_amd64.deb" && \
-    apt install ./code_1.67.2-1652812855_amd64.deb && \
-    rm -f ./code_1.67.2-1652812855_amd64.deb
-
-USER $NB_UID
+#USER root
+#USER $NB_UID
 
 # Done.
