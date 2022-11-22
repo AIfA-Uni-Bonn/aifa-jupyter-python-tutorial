@@ -1,5 +1,5 @@
 # written: 2019-06-18
-# changed: 2022-10-15
+# changed: 2022-11-14
 
 # Software:
 # - jupyterlab 3.3.2
@@ -275,6 +275,11 @@ RUN conda install lmfit && \
     conda clean -a -y
 RUN pip install git+https://github.com/proplot-dev/proplot.git
 
+
+# test configuration for python extra packages
+RUN conda install numba plotly jax && \
+    # remove all unwanted stuff
+    conda clean -a -y
 
 # addon nbgrader development from github
 
