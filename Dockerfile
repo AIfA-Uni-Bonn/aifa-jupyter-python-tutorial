@@ -116,14 +116,27 @@ RUN apt-get -qq update && \
         tree \
 	libreoffice libreoffice-l10n-en-gb libreoffice-l10n-de \
         libgbm1 libxkbfile1 \
+        dbus-x11 \
+        firefox epiphany-browser \
+        xfce4 xfce4-panel xfce4-session xfce4-settings xfce4-terminal \
+        xorg \
+        fuse lftp rsync unrar unzip \
+        xubuntu-icon-theme \
+        libreoffice libreoffice-l10n-de texstudio gnumeric gnupg2 kile  \
+        xterm \
+        emacs kate vim-gtk3 dia gedit geany gnuplot-x11 gnuplot info \
+        gnome-terminal \
+        evince atril  \
+        codeblocks \
+        gcc g++ gfortran binutils bison flex patch clang ffmpeg gdb m4 mailutils mc  \
         && \
   apt-get -qq purge && \
   apt-get -qq clean && \
   rm -rf /var/lib/apt/lists/*
 
-RUN wget "https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.70.1-1660113095_amd64.deb" && \
-    apt install ./code_1.70.1-1660113095_amd64.deb && \
-    rm -f ./code_1.70.1-1660113095_amd64.deb
+RUN wget "https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.73.1-1667967334_amd64.deb" && \
+    apt install ./code_*_amd64.deb && \
+    rm -f ./code_*_amd64.deb
 
 COPY policy.xml /etc/ImageMagick-6/
 
@@ -147,22 +160,25 @@ USER $NB_UID
 # The conda-forge channel is already present in the system .condarc file, so there is no need to
 # add a channel invocation in any of the next commands.
 
+# install mamba
+RUN conda install mamba
+
 # install jupyterlab
-RUN conda install jupyterlab=3.3.2  --yes && \
+RUN mamba install jupyterlab=3.3.2  --yes && \
 	# Add nbgrader 0.6.1 to the image
 	# More info at https://nbgrader.readthedocs.io/en/stable/
         # conda install nbgrader=0.6.1 --yes &6 \
 	# Add the notebook extensions
-	conda install jupyter_contrib_nbextensions --yes && \
+	mamba install jupyter_contrib_nbextensions --yes && \
 
 	# Add RISE 5.4.1 to the mix as well so user can show live slideshows from their notebooks
 	# More info at https://rise.readthedocs.io
 	# Note: Installing RISE with --no-deps because all the neeeded deps are already present.
-	conda install rise --no-deps --yes && \
+	mamba install rise --no-deps --yes && \
 
 
 	# Add the science packages for AIfA
-	conda install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes && \
+	mamba install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes && \
 
 	# Add kafe for python fitting
 	pip install kafe2 'iminuit>2' PhyPraKit && \
@@ -171,8 +187,8 @@ RUN conda install jupyterlab=3.3.2  --yes && \
 	pip install meteostat && \
 
 	# add extensions by conda
-	conda install ipywidgets ipyevents ipympl jupyterlab_latex --yes && \
-	conda install version_information jupyter-archive>=3.3.0 jupyterlab-git --yes && \
+	mamba install ipywidgets ipyevents ipympl jupyterlab_latex --yes && \
+	mamba install version_information jupyter-archive>=3.3.0 jupyterlab-git --yes && \
 
 	# jupyterlab extensions
 
@@ -180,7 +196,7 @@ RUN conda install jupyterlab=3.3.2  --yes && \
 	pip install jupyterlab-topbar jupyterlab-logout && \
 
 	# memory display in bottom line
-	conda install nbresuse && \
+	mamba install nbresuse && \
 
 	# theme toggling extension
 	# interactive widgets
@@ -219,31 +235,19 @@ RUN conda install jupyterlab=3.3.2  --yes && \
 	pip install calysto_bash && \
 
 	# install spyder
-	conda install spyder && \
+	mamba install spyder && \
 
 	# remove all unwanted stuff
-	conda clean -a -y
+	mamba clean -a -y
 
 # add the jupyter XFCE desktop
 USER root
 
-RUN apt-get -y update \
- && apt-get install -y dbus-x11 \
-   firefox epiphany-browser \
-   xfce4 xfce4-panel xfce4-session xfce4-settings xfce4-terminal \
-   xorg \
-   fuse lftp rsync unrar unzip \
-   xubuntu-icon-theme \ 
-   libreoffice libreoffice-l10n-de texstudio gnumeric gnupg2 kile  \
-   xterm \
-   emacs kate vim-gtk3 dia gedit geany gnuplot-x11 gnuplot info \
-   gnome-terminal \
-   evince atril  \
-   codeblocks \
-   gcc g++ gfortran binutils bison flex patch clang ffmpeg gdb m4 mailutils mc  \
- && apt-get -qq purge \
- && apt-get -qq clean \
- && rm -rf /var/lib/apt/lists/*
+#RUN apt-get -y update \
+# && apt-get install -y ... \
+# && apt-get -qq purge \
+# && apt-get -qq clean \
+# && rm -rf /var/lib/apt/lists/*
 
 # Remove light-locker to prevent screen lock
 ARG TURBOVNC_VERSION=2.2.6
@@ -258,7 +262,7 @@ RUN chown -R $NB_UID:$NB_GID $HOME
 
 USER $NB_UID
 
-RUN conda install jupyter-server-proxy>=1.4 websockify
+RUN mamba install jupyter-server-proxy>=1.4 websockify
 
 # install jupyter-remote-desktop (fork with all patches and merges)
 #RUN pip install https://github.com/jupyterhub/jupyter-remote-desktop-proxy/archive/refs/heads/main.zip
@@ -270,16 +274,16 @@ COPY vnc/xstartup /opt/conda/lib/python3.9/site-packages/jupyter_desktop/share/
 
 
 # test configuration for the praktikum physik 2022-10--15
-RUN conda install lmfit && \
+RUN mamba install lmfit && \
     # remove all unwanted stuff
-    conda clean -a -y
+    mamba clean -a -y
 RUN pip install git+https://github.com/proplot-dev/proplot.git
 
 
 # test configuration for python extra packages
-RUN conda install numba plotly jax && \
+RUN mamba  install numba plotly jax && \
     # remove all unwanted stuff
-    conda clean -a -y
+    mamba clean -a -y
 
 # addon nbgrader development from github
 
