@@ -178,7 +178,7 @@ RUN mamba install jupyterlab=3.3.2  --yes && \
 
 
 	# Add the science packages for AIfA
-	mamba install numpy matplotlib scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes && \
+	mamba install numpy matplotlib==3.5.2 scipy astropy sympy scikit-image scikit-learn seaborn colorama pandas pyhdf h5py pydub --yes && \
 
 	# Add kafe for python fitting
 	pip install kafe2 'iminuit>2' PhyPraKit && \
