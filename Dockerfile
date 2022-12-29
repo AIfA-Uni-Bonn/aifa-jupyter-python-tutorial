@@ -285,6 +285,15 @@ RUN mamba  install numba plotly jax && \
     # remove all unwanted stuff
     mamba clean -a -y
 
+
+# lensing stuff
+RUN mamba install astroquery \
+     pyccl \
+     galsim \
+     camb && \
+    mamba clean -a -y
+RUN pip install colossus lenstools
+
 # addon nbgrader development from github
 
 #USER root
