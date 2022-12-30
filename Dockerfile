@@ -290,7 +290,8 @@ RUN mamba  install numba plotly jax && \
 RUN mamba install astroquery \
      pyccl \
      galsim \
-     camb && \
+     camb \
+     treecorr && \
     mamba clean -a -y
 RUN pip install colossus lenstools
 
