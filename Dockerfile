@@ -295,6 +295,11 @@ RUN mamba install astroquery \
     mamba clean -a -y
 RUN pip install colossus lenstools
 
+
+# additional stuff
+RUN mamba install snakeviz line_profiler && \
+   mamba clean -a -y
+
 # addon nbgrader development from github
 
 #USER root
