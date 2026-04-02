@@ -1,0 +1,12 @@
+kafe2
+iminuit>2
+PhyPraKit
+meteostat
+jupyterlab-logout
+calysto_bash
+https://github.com/ocordes/jupyter-remote-desktop-proxy/archive/refs/heads/main.zip
+jupyterlab-theme-solarized-dark
+jupyterlab-latex
+pytplot-mpl-temp
+pyspedas
+ipyaladin

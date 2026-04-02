@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=PyCharm
+Comment=The Python IDE for Professional Developers
+GenericName=Text Editor
+Exec=/usr/local/bin/pycharm
+Icon=pycharm
+Type=Application
+StartupNotify=false
+StartupWMClass=Code
+Categories=TextEditor;Development;IDE;
+MimeType=text/plain;
+Actions=new-empty-window;
+Keywords=pycharm;
